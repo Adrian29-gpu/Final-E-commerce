@@ -1,0 +1,110 @@
+@startuml
+entity User {
+    + user_id : INT
+    --
+    name : VARCHAR
+    email : VARCHAR
+    password : VARCHAR
+    address : VARCHAR
+    phone_number : VARCHAR
+    role : VARCHAR
+}
+
+entity Cart {
+    + cart_id : INT
+    --
+    user_id : INT
+    created_at : DATETIME
+}
+
+entity Fav {
+    + fav_id : INT
+    --
+    user_id : INT
+    product_id : INT
+    created_at : DATETIME
+}
+
+entity Orders {
+    + order_id : INT
+    --
+    user_id : INT
+    order_date : DATETIME
+    arrival : DATETIME
+    status : VARCHAR
+    type : VARCHAR
+    buy_method : VARCHAR
+    total_price : DECIMAL
+}
+
+entity Product {
+    + product_id : INT
+    --
+    store_id : INT
+    name : VARCHAR
+    description : TEXT
+    price : DECIMAL
+    stock : INT
+    image : VARCHAR
+    category : VARCHAR
+}
+
+entity Order_Details {
+    + order_detail_id : INT
+    --
+    order_id : INT
+    product_id : INT
+    quantity : INT
+    price : DECIMAL
+}
+
+entity Comment_Rating {
+    + comment_id : INT
+    --
+    user_id : INT
+    product_id : INT
+    comment : TEXT
+    rating : DECIMAL
+    created_at : DATETIME
+}
+
+entity Store {
+    + store_id : INT
+    --
+    user_id : INT
+    name : VARCHAR
+    email : VARCHAR
+    address : VARCHAR
+    image : VARCHAR
+    description : TEXT
+    created_at : DATETIME
+}
+
+' Relationships
+User ||--o{ Cart : "has"
+User ||--o{ Orders : "places"
+User ||--o{ Fav : "favorites"
+User ||--|| Store : "owns"
+User ||--o{ Comment_Rating : "writes"
+
+Cart }o--|| User : "belongs to"
+Cart }o--o{ Product : "contains"
+
+Fav }o--|| User : "favorited by"
+Fav }o--|| Product : "is"
+
+Orders }o--|| User : "belongs to"
+Orders ||--o{ Order_Details : "contains"
+
+Order_Details }o--|| Orders : "part of"
+Order_Details }o--|| Product : "includes"
+
+Product ||--o{ Comment_Rating : "reviewed by"
+Product }o--|| Store : "sold by"
+
+Comment_Rating }o--|| User : "written by"
+Comment_Rating }o--|| Product : "for"
+
+Store ||--o{ Product : "has"
+
+@enduml
